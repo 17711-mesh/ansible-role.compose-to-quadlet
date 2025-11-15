@@ -1,0 +1,11 @@
+---
+- name: Include installation tasks
+  ansible.builtin.include_tasks: install.yml
+
+- name: Generate Quadlet units from Compose file
+  compose_to_quadlet:
+    project_path: "{{ compose_to_quadlet_src_path }}"
+    compose_file: "{{ compose_file_path }}"
+    output_dir: "{{ quadlet_output_dir }}"
+    stack_name: "{{ quadlet_stack_name | default(omit) }}"
+  when: compose_file_path is defined and compose_file_path | length > 0

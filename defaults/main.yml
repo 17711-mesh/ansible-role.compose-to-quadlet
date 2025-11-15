@@ -1,0 +1,9 @@
+---
+# defaults file for ansible-role.compose-to-quadlet
+
+compose_to_quadlet_src_repo: "https://github.com/17711-mesh/python.compose-to-quadlet"
+compose_to_quadlet_src_path: "/opt/python.compose-to-quadlet"
+compose_to_quadlet_version: "dev"
+compose_file_path: "" # This should be set by the user
+quadlet_output_dir: "/etc/containers/systemd"
+quadlet_stack_name: "" # Optional

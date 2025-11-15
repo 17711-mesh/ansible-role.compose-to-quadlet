@@ -1,0 +1,18 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: false
+  become: false
+
+  vars:
+    compose_to_quadlet_src_repo: "https://github.com/17711-mesh/python.compose-to-quadlet"
+    compose_to_quadlet_src_path: "/opt/python.compose-to-quadlet"
+    compose_file_path: "/tmp/test-data/docker-compose.yml"
+    quadlet_output_dir: "/etc/containers/systemd"
+    quadlet_stack_name: "molecule-stack"
+
+  tasks:
+    - name: Run local role under test from project root
+      ansible.builtin.import_role:
+        name: "{{ playbook_dir }}/../.."
+

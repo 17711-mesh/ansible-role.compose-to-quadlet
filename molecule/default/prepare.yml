@@ -1,0 +1,32 @@
+---
+- name: Prepare
+  hosts: all
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install runtime dependencies for the role
+      ansible.builtin.apt:
+        name:
+          - git
+          - python3-apt
+        state: present
+
+    - name: Ensure test-data directory exists
+      ansible.builtin.file:
+        path: /tmp/test-data
+        state: directory
+        mode: "0755"
+
+    - name: Copy docker-compose.yml into instance
+      ansible.builtin.copy:
+        src: docker-compose.yml
+        dest: /tmp/test-data/docker-compose.yml
+        mode: "0644"
+

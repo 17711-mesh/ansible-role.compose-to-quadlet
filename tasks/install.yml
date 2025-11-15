@@ -1,0 +1,21 @@
+---
+- name: Ensure git is installed
+  ansible.builtin.package:
+    name: git
+    state: present
+
+- name: Clone python.compose-to-quadlet repository
+  ansible.builtin.git:
+    repo: "{{ compose_to_quadlet_src_repo }}"
+    dest: "{{ compose_to_quadlet_src_path }}"
+    version: "{{ compose_to_quadlet_version }}" 
+    update: yes
+    force: yes
+  register: git_clone_result
+
+- name: Install python.compose-to-quadlet library and its dependencies
+  ansible.builtin.pip:
+    name: "{{ compose_to_quadlet_src_path }}"
+    editable: yes # Install in editable mode so it can be imported
+    executable: pip3
+  register: pip_install_result

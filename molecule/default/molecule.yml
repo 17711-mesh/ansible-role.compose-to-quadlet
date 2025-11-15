@@ -1,0 +1,35 @@
+driver:
+  name: podman
+
+platforms:
+  - name: instance
+    image: "docker.io/library/python:3.11-slim"
+    privileged: true
+    pre_build_image: true
+
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      roles_path: "../../.."
+  inventory:
+    group_vars:
+      all:
+        ansible_user: root
+        ansible_become: false
+        ansible_python_interpreter: /usr/local/bin/python3
+        
+
+dependency:
+  name: galaxy
+  enabled: false
+
+scenario:
+  test_sequence:
+    - dependency
+    - create
+    - prepare
+    - converge
+    - verify
+    - destroy
+

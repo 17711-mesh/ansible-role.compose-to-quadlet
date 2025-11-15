@@ -1,0 +1,76 @@
+---
+- name: Verify
+  hosts: all
+  become: false
+
+  tasks:
+    - name: Check that Quadlet directory exists
+      ansible.builtin.stat:
+        path: /etc/containers/systemd
+      register: quadlet_dir
+
+    - name: Ensure Quadlet directory exists
+      ansible.builtin.assert:
+        that:
+          - quadlet_dir.stat.exists
+          - quadlet_dir.stat.isdir
+
+    - name: Check container unit files
+      ansible.builtin.stat:
+        path: "/etc/containers/systemd/{{ item }}"
+      loop:
+        - web.container
+        - db.container
+      register: container_units
+
+    - name: Assert container unit files exist
+      ansible.builtin.assert:
+        that:
+          - item.stat.exists
+          - item.stat.isreg
+        fail_msg: "Container unit {{ item.stat.path | default(item.item) }} is missing or not a regular file"
+      loop: "{{ container_units.results }}"
+
+    - name: Check network unit files
+      ansible.builtin.stat:
+        path: "/etc/containers/systemd/{{ item }}"
+      loop:
+        - frontend.network
+        - backend.network
+      register: network_units
+
+    - name: Assert network unit files exist
+      ansible.builtin.assert:
+        that:
+          - item.stat.exists
+          - item.stat.isreg
+        fail_msg: "Network unit {{ item.stat.path | default(item.item) }} is missing or not a regular file"
+      loop: "{{ network_units.results }}"
+
+    - name: Check volume unit files
+      ansible.builtin.stat:
+        path: "/etc/containers/systemd/{{ item }}"
+      loop:
+        - web-data.volume
+        - db-data.volume
+      register: volume_units
+
+    - name: Assert volume unit files exist
+      ansible.builtin.assert:
+        that:
+          - item.stat.exists
+          - item.stat.isreg
+        fail_msg: "Volume unit {{ item.stat.path | default(item.item) }} is missing or not a regular file"
+      loop: "{{ volume_units.results }}"
+
+    - name: Check stack target unit file
+      ansible.builtin.stat:
+        path: /etc/containers/systemd/molecule-stack.target
+      register: stack_target
+
+    - name: Assert stack target unit exists
+      ansible.builtin.assert:
+        that:
+          - stack_target.stat.exists
+          - stack_target.stat.isreg
+
