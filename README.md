@@ -1,5 +1,4 @@
-# README.md
-# Ansible Role: compose-to-quadlet
+# Ansible Role: Compose to Quadlet
 
 This role wraps the Python project `python.compose-to-quadlet` to generate Podman Quadlet units from a Docker/Podman Compose file.
 
