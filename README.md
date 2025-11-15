@@ -1,4 +1,20 @@
-# Ansible Role: Compose to Quadlet
+# Ansible Role: Compose to Quadlet.
+
+> This role wraps the Python project `python.compose-to-quadlet` to generate Podman Quadlet units from a Docker/Podman Compose file.
+
+## Table of Contents
+
+* [Synopsis](#synopsis)
+* [Requirements](#requirements)
+* [Role Variables](#role-variables)
+* [Example Playbook](#example-playbook)
+* [Testing](#testing)
+* [Changelog](#changelog)
+* [License](#license)
+* [Author Information](#author-information)
+
+
+## Synopsis
 
 This role wraps the Python project `python.compose-to-quadlet` to generate Podman Quadlet units from a Docker/Podman Compose file.
 
@@ -6,6 +22,7 @@ This role wraps the Python project `python.compose-to-quadlet` to generate Podma
 
 - Ansible
 - Podman
+- Optional: Molecule
 
 ## Role Variables
 
@@ -27,7 +44,7 @@ See `defaults/main.yml` for a list of variables and their default values.
         quadlet_stack_name: "my-stack"
 ```
 
-## Testing with Molecule
+## Testing
 
 This role includes Molecule tests with the Podman driver to ensure its functionality.
 
@@ -80,3 +97,38 @@ To debug a specific stage, you can run individual Molecule commands:
 -   `molecule destroy`: Destroy the test instance.
 
 You can also SSH into the running instance after `molecule create` or `molecule converge` using `molecule login`.
+
+## Changelog
+
+See [CHANGELOG](CHANGELOG.md) for a detailed history of changes.
+
+## License
+
+>
+> [MIT License](LICENCE)
+>
+> Copyright (c) 2025, 🐌 [The 17711 Frame](https://17711.org)
+> 
+> Permission is hereby granted, free of charge, to any person obtaining a copy
+> of this software and associated documentation files (the "Software"), to deal
+> in the Software without restriction, including without limitation the rights
+> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+> copies of the Software, and to permit persons to whom the Software is
+> furnished to do so, subject to the following conditions:
+> 
+> The above copyright notice and this permission notice shall be included in all
+> copies or substantial portions of the Software.
+> 
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+> SOFTWARE.
+> 
+
+## Author Information
+
+This project is maintained by 🐌 [The 17711 Frame](https://17711.org).
+
