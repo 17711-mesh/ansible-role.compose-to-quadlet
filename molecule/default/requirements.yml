@@ -1,0 +1,4 @@
+- src: https://github.com/17711-mesh/ansible-role.compose-to-quadlet.git
+  scm: git
+  version: v0.1.1
+  name: mesh_17711.compose-to-quadlet

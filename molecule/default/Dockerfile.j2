@@ -1,0 +1,55 @@
+# syntax=docker/dockerfile:1.4
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+# Install necessary packages for systemd, podman, and rootless operation
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    systemd \
+    systemd-container \
+    dbus \
+    uidmap \
+    podman \
+    iproute2 \
+    sudo \
+    python3-pip \
+    python3-setuptools \
+    python3-wheel \
+    python3-apt \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create a non-root user for rootless Podman
+ARG TEST_USER=testops
+ARG TEST_UID=1001
+ARG TEST_GID=1001
+RUN groupadd --gid ${TEST_GID} ${TEST_USER} && \
+    useradd --uid ${TEST_UID} --gid ${TEST_GID} -m ${TEST_USER} -s /bin/bash && \
+    echo "${TEST_USER}:100000:65536" >> /etc/subuid && \
+    echo "${TEST_USER}:100000:65536" >> /etc/subgid && \
+    echo "${TEST_USER} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${TEST_USER} && \
+    chmod 0440 /etc/sudoers.d/${TEST_USER}
+
+# Configure PATH for Podman binaries
+ENV PATH="/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/podman/bin:/opt/podman/libexec/podman"
+
+# Configure ld.so.d for Podman libraries (if /opt/podman/lib exists)
+RUN mkdir -p /etc/ld.so.conf.d/ && \
+    echo "/opt/podman/lib" > /etc/ld.so.conf.d/podman.conf && \
+    ldconfig
+
+# Enable linger for the test user (doesn't work in docker)
+# RUN loginctl enable-linger ${TEST_USER}
+
+RUN mkdir -p /tmp/.ansible && chmod 1777 /tmp /tmp/.ansible
+
+# Set up systemd for user
+ENV container=docker
+VOLUME [ "/sys/fs/cgroup" ]
+
+
+# Set default user
+USER ${TEST_USER}
+WORKDIR /home/${TEST_USER}
+
+#CMD ["/lib/systemd/systemd"]
+CMD ["sleep", "infinity"]

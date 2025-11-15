@@ -9,3 +9,38 @@
     output_dir: "{{ quadlet_output_dir }}"
     stack_name: "{{ quadlet_stack_name | default(omit) }}"
   when: compose_file_path is defined and compose_file_path | length > 0
+
+# ---------------------------------------------------------------------------
+# Optional: generate Quadlet units from a Compose file
+# ---------------------------------------------------------------------------
+
+- name: Ensure Quadlet output directory exists
+  ansible.builtin.file:
+    path: "{{ mesh_17711_compose_to_quadlet__output_dir }}"
+    state: directory
+    owner: "{{ mesh_17711_compose_to_quadlet__owner }}"
+    group: "{{ mesh_17711_compose_to_quadlet__group }}"
+    mode: "0755"
+  when:
+    - mesh_17711_compose_to_quadlet__generate_units
+    - mesh_17711_compose_to_quadlet__output_dir is not none
+
+- name: Generate Quadlet units from Compose file (using custom module)
+  compose_to_quadlet:
+    project_path: "{{ compose_to_quadlet_src_path }}" # Re-using existing variable for project_path
+    compose_file: "{{ mesh_17711_compose_to_quadlet__compose_file_path }}"
+    output_dir: "{{ mesh_17711_compose_to_quadlet__output_dir }}"
+    stack_name: "{{ mesh_17711_compose_to_quadlet__stack_name | default(omit) }}"
+  register: mesh_17711_compose_to_quadlet__cmd
+  changed_when: mesh_17711_compose_to_quadlet__cmd.changed
+  when:
+    - mesh_17711_compose_to_quadlet__generate_units
+    - mesh_17711_compose_to_quadlet__compose_file_path is not none
+    - mesh_17711_compose_to_quadlet__output_dir is not none
+
+- name: Debug Quadlet generation command (optional)
+  ansible.builtin.debug:
+    var: mesh_17711_compose_to_quadlet__cmd.stdout
+  when:
+    - mesh_17711_compose_to_quadlet__generate_units
+    - mesh_17711_compose_to_quadlet__cmd is defined

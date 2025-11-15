@@ -7,3 +7,22 @@ compose_to_quadlet_version: "dev"
 compose_file_path: "" # This should be set by the user
 quadlet_output_dir: "/etc/containers/systemd"
 quadlet_stack_name: "" # Optional
+
+# Whether this role should also generate Quadlet units from a Compose file
+mesh_17711_compose_to_quadlet__generate_units: false
+
+# Path to the Compose YAML file to convert
+mesh_17711_compose_to_quadlet__compose_file_path: null
+
+# Directory where Quadlet units will be written
+mesh_17711_compose_to_quadlet__output_dir: null
+
+# Optional logical stack name (if your CLI supports it)
+mesh_17711_compose_to_quadlet__stack_name: null
+
+# Extra CLI args (list of strings) forwarded to the compose-to-quadlet tool
+mesh_17711_compose_to_quadlet__extra_args: []
+
+# Owner / group of the generated Quadlet units (by default: current Ansible user)
+mesh_17711_compose_to_quadlet__owner: "{{ ansible_user_id | default('root') }}"
+mesh_17711_compose_to_quadlet__group: "{{ ansible_user_gid | default('root') }}"

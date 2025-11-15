@@ -5,11 +5,20 @@
   become: false
 
   vars:
+    # Variables for the compose-to-quadlet role
     compose_to_quadlet_src_repo: "https://github.com/17711-mesh/python.compose-to-quadlet"
     compose_to_quadlet_src_path: "/opt/python.compose-to-quadlet"
-    compose_file_path: "/tmp/test-data/docker-compose.yml"
-    quadlet_output_dir: "/etc/containers/systemd"
-    quadlet_stack_name: "molecule-stack"
+    # Variables to trigger Quadlet generation
+    mesh_17711_compose_to_quadlet__generate_units: true
+    mesh_17711_compose_to_quadlet__compose_file_path: "{{ playbook_dir }}/files/docker-compose.yml"
+    mesh_17711_compose_to_quadlet__output_dir: "/home/testops/.config/containers/systemd" # Changed for rootless user
+    mesh_17711_compose_to_quadlet__stack_name: "molecule-stack"
+    mesh_17711_compose_to_quadlet__owner: "testops" # Changed for rootless user
+    mesh_17711_compose_to_quadlet__group: "testops" # Changed for rootless user
+
+    # Variables for the main role under test
+    mesh_17711_stack__user: testops
+    mesh_17711_stack__manage_user: true
 
   tasks:
     - name: Run local role under test from project root
